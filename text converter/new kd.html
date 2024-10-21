@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Resizer and Music Player</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('https://source.unsplash.com/featured/?education,learning') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            margin: 0;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 223, 186, 0.7), rgba(186, 255, 223, 0.7), rgba(186, 223, 255, 0.7));
+            z-index: 1;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        #displayText {
+            font-size: 24px;
+            margin: 20px;
+            padding: 10px;
+            border: 2px solid #673ab7;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: font-size 0.2s ease;
+            z-index: 2;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #673ab7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+            z-index: 2;
+        }
+        button:hover {
+            background-color: #5e35b1;
+            transform: translateY(-2px);
+        }
+        select {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #673ab7;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+        label {
+            margin: 10px;
+            font-size: 18px;
+            color: #555;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+    <h1>Text Resizer and Music Player</h1>
+    <div id="displayText">This is some text!</div>
+    <button onclick="shrinkText()">Make Smaller</button>
+    <button onclick="enlargeText()">Make Bigger</button>
+
+    <label for="fontSelect">Choose Font Style:</label>
+    <select id="fontSelect" onchange="updateFontStyle()">
+        <option value="Arial">Arial</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+
+    <audio autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function shrinkText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize - 5) + 'px';
+        }
+
+        function enlargeText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize + 5) + 'px';
+        }
+
+        function updateFontStyle() {
+            const textElement = document.getElementById('displayText');
+            const selectedFont = document.getElementById('fontSelect').value;
+            textElement.style.fontFamily = selectedFont;
+        }
+    </script>
+
+</body>
+</html>
