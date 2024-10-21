@@ -1,0 +1,31 @@
+body{
+    background-color: gold;
+}
+.register{
+    position: relative;
+    left: 700px;
+    animation: reg 2s linear infinite;
+}
+a{
+    text-decoration: none;
+    position: relative;
+bottom: 100px;
+}
+a{
+    background-color: white;
+    animation: oii 2s linear infinite;
+}
+@keyframes oii{
+    50%{
+        background-color: white;
+
+    }
+    75%{
+        background-color: red;
+    }
+}
+@keyframes reg{
+    50%{
+        transform: scale(0.5);
+    }
+}

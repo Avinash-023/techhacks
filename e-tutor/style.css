@@ -1,0 +1,66 @@
+body{
+    background-color: aqua;
+}
+.ATOM1
+{
+    text-decoration: none;
+
+    margin-right: 20PX;
+}
+.ATOM1:hover{
+    background-color: azure;
+    
+
+
+
+}
+.input1{
+    height: 50px;
+    width: 200px;
+    border-radius: 30%;
+    margin-left:1200px;
+    margin-bottom:0 ;
+    background-color: RED;
+
+}
+.input1:hover{
+    background-color: aqua;
+}
+.input2{
+    background-color: green;
+    width: 100px;
+    animation: dai 10s linear infinite;
+}
+.h1{
+    size: 400px;
+    color: brown;
+}
+.ROADMAP{
+    border: 10px solid black;
+    width: 200px;
+    position: relative;
+    top: 200px;
+
+
+}
+.image1{
+    position:reltive;
+    top: 200px;
+    right: 200px;
+
+}
+.games{
+    border: 10px solid black;
+    width: 200px;
+    position: relative;
+    left: 250px;
+
+
+}
+@keyframes dai{
+    50%{
+        border-radius: 50%;
+        background-color: red;
+        transform:rotate(360deg);
+    }
+}

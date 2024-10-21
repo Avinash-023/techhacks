@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech Example</title>
+</head>
+<body>
+    <h1>Text to Speech Converter</h1>
+    <textarea id="text-input" rows="10" cols="30" placeholder="Type your text here..."></textarea><br>
+    <button id="speak-button">Speak</button>
+    
+    <script>
+        let voices = [];
+
+        function populateVoiceList() {
+            voices = speechSynthesis.getVoices().filter(voice => voice.name.includes('Female'));
+        }
+
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+
+        document.getElementById('speak-button').addEventListener('click', function() {
+            const text = document.getElementById('text-input').value;
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+            
+                utterance.rate = 0.5; // Slow down the speech
+                utterance.pitch = 1; // Normal pitch for clarity
+                
+            
+                const femaleVoice = voices.find(voice => voice.name.includes('Female'));
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+
+            
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Please enter some text.');
+            }
+        });
+    </script>
+</body>
+</html>
