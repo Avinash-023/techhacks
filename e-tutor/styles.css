@@ -1,7 +1,7 @@
 :root {
     --main-text-color: #555;
     --main-bg-color: #fff;
-    --accent-color: #e88823;
+    --accent-color: #3b71be;
     --hover-color: #563434;
     --slate-gray: #8a8a8a;
     --smoth-pink: #ffd6d6;
@@ -114,7 +114,7 @@
   }
   
   .header {
-    background: radial-gradient(#fff, #ffd6d6);
+    background: radial-gradient(#fff, #a1cad2);
   }
   
   .header .row {
