@@ -1,42 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>HTML Login Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
     <link rel="stylesheet" href="login.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a8e0f8, #f0e4f0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .main {
+            position: relative;
+            z-index: 1;
+            width: 450px;
+            height: 420px;
+            padding: 40px;
+            background: rgba(30, 30, 30, 0.85);
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+            text-align: center;
+        }
+        h1 {
+            color: #00ffcc;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        label {
+            color: #fff;
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            text-align: left;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+        .button {
+            width: 200px;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #00ffcc;
+            color: #000;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background: #00e6b3;
+            transform: translateY(-2px);
+        }
+        p {
+            color: #fff;
+            margin-top: 30px;
+        }
+        a {
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
     <div class="main">
         <h1>Login</h1>
-        
         <form action="">
-            <label for="first">
-                Username:
-            </label>
-            <input type="text" id="first" name="first" 
-                placeholder="Enter your Username" required>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your Username" required>
 
-            <label for="password">
-                Password:
-            </label>
-            <input type="password" id="password" name="password" 
-                placeholder="Enter your Password" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your Password" required>
 
-            <div class="wrap">
-                <button type="submit">
-                    <a href="../index.html" style="text-decoration: none; color: white;">
-                    Submit
-                   </a>
-                </button>
+            <div class="button-container">
+                <button type="submit" class="button">Submit</button>
             </div>
         </form>
-        
-        <p>Not registered?
-            <a href="../reg.html" style="text-decoration: none;">
-                Create an account
-            </a>
-        </p>
+        <p>Not registered? <a href="../reg.html">Create an account</a></p>
     </div>
 </body>
 
