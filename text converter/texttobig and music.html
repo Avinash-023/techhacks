@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Size, Style, and Music Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e1bee7, #ffcc80);
+            color: #333;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #text {
+            font-size: 24px; /* Default text size */
+            margin: 20px;
+            padding: 10px;
+            border: 2px solid #673ab7;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: font-size 0.2s ease;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #673ab7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #5e35b1;
+            transform: translateY(-2px);
+        }
+        select {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #673ab7;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        label {
+            margin: 10px;
+            font-size: 18px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Text Size, Style, and Music Converter</h1>
+    <div id="text">This is some text!</div>
+    <button onclick="makeTextSmaller()">Make Smaller</button>
+    <button onclick="makeTextBigger()">Make Bigger</button>
+
+    <label for="fontStyle">Choose Font Style:</label>
+    <select id="fontStyle" onchange="changeFontStyle()">
+        <option value="Arial">Arial</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+
+    <audio autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function makeTextSmaller() {
+            const textDiv = document.getElementById('text');
+            let currentSize = parseInt(window.getComputedStyle(textDiv).fontSize);
+            textDiv.style.fontSize = (currentSize - 5) + 'px'; // Decrease by 5 pixels
+        }
+
+        function makeTextBigger() {
+            const textDiv = document.getElementById('text');
+            let currentSize = parseInt(window.getComputedStyle(textDiv).fontSize);
+            textDiv.style.fontSize = (currentSize + 5) + 'px'; // Increase by 5 pixels
+        }
+
+        function changeFontStyle() {
+            const textDiv = document.getElementById('text');
+            const selectedFont = document.getElementById('fontStyle').value;
+            textDiv.style.fontFamily = selectedFont; // Change font style
+        }
+    </script>
+
+</body>
+</html>
