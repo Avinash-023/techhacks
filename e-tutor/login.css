@@ -8,7 +8,21 @@ body {
     background: #f3f3f3;
     flex-direction: column;
     margin: 0;
-    background-color:#a1cad2;
+    background-color: white;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.7); /* White overlay with 70% opacity */
+    z-index: 1; /* Make sure it sits above the background */
+}
+
+h1, textarea, button {
+    position: relative; /* Ensure these elements are above the overlay */
+    z-index: 2;
 }
 
 .main {
