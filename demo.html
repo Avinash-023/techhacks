@@ -26,8 +26,8 @@
         }
 
         .main {
-            width: 450px;
-            padding: 40px;
+            width: 400px; /* Increased width */
+            padding: 30px; /* Adjusted padding */
             border-radius: 10px;
             box-shadow: 0 0 25px rgba(0, 150, 255, 0.7);
             text-align: center;
@@ -46,13 +46,13 @@
         }
 
         h2 {
-            margin-bottom: 30px;
-            font-size: 2em;
+            margin-bottom: 20px; /* Adjusted margin */
+            font-size: 1.8em; /* Adjusted font size */
         }
 
         label {
             display: block;
-            margin: 15px 0 5px;
+            margin: 10px 0 5px; /* Adjusted margins */
             font-weight: bold;
             text-align: left;
         }
@@ -62,8 +62,8 @@
         input[type="password"],
         input[type="tel"] {
             width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 25px;
+            padding: 10px; /* Adjusted padding */
+            margin-bottom: 15px; /* Adjusted margin */
             border: 1px solid #007acc;
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
@@ -81,15 +81,15 @@
 
         button[type="submit"] {
             width: 100%;
-            padding: 12px;
+            padding: 10px; /* Adjusted padding */
             border: none;
             border-radius: 5px;
             background: #007acc;
             color: #fff;
-            font-size: 1.1em;
+            font-size: 1em; /* Kept size the same */
             cursor: pointer;
             transition: background 0.3s, transform 0.2s;
-            margin-top: 20px;
+            margin-top: 15px; /* Adjusted margin */
         }
 
         button[type="submit"]:hover {
@@ -97,7 +97,7 @@
         }
 
         p {
-            margin-top: 30px;
+            margin-top: 20px; /* Adjusted margin */
         }
 
         a {
@@ -111,8 +111,8 @@
 
         .toggle-button {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px; /* Adjusted position */
+            right: 15px; /* Adjusted position */
             background: transparent;
             border: none;
             cursor: pointer;
@@ -124,6 +124,9 @@
         .dark-mode .toggle-button {
             color: #fff;
         }
+        .reg{
+            color: #007acc;
+        }
     </style>
 </head>
 
@@ -132,7 +135,7 @@
         <button class="toggle-button" id="toggleButton" title="Toggle Dark Mode">
             <i class="fas fa-moon"></i>
         </button>
-        <h2>Registration Form</h2>
+        <h2 class="reg">Registration Form</h2>
         <form id="registrationForm" action="">
             <label for="first">First Name:</label>
             <input type="text" id="first" name="first" required />
