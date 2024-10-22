@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Text Reader</title>
+    <!-- Include PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f5f6fa;
+            --accent-color: #34495e;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: var(--accent-color);
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 2.5em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1.25rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-input-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            font-size: 1em;
+        }
+
+        .file-input-button:hover {
+            background: #357abd;
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            background: var(--secondary-color);
+            padding: 0.625rem 1.25rem;
+            border-radius: 5px;
+        }
+
+        .speed-control label {
+            font-weight: 500;
+        }
+
+        .speed-control select {
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: white;
+        }
+
+        #content-display {
+            width: calc(100% - 3rem);
+            min-height: 400px;
+            border: 1px solid #e1e1e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem auto;
+            line-height: 1.8;
+            background: white;
+            overflow-y: auto;
+        }
+
+        #content-display span {
+            cursor: pointer;
+            padding: 0.125rem 0.25rem;
+            border-radius: 3px;
+            transition: all 0.2s;
+        }
+
+        #content-display span:hover {
+            background-color: #e3f2fd;
+        }
+
+        .highlight {
+            background-color: #ffd700 !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.25rem 0;
+            padding: 0 1rem;
+        }
+
+        .page-controls button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .page-controls button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status {
+            text-align: center;
+            color: var(--success-color);
+            margin: 0.625rem 0;
+            font-weight: 500;
+            padding: 0.5rem;
+        }
+
+        #page-num {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of the HTML remains the same -->
+    <div class="container">
+        <h1>Interactive Text Reader</h1>
+        
+        <div class="controls">
+            <div class="file-input-wrapper">
+                <button class="file-input-button">Choose File</button>
+                <input type="file" id="file-input" accept=".txt,.pdf">
+            </div>
+
+            <div class="speed-control">
+                <label for="speech-speed">Speech Speed:</label>
+                <select id="speech-speed">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="page-controls">
+            <button id="prev-page" disabled>Previous Page</button>
+            <span id="page-num"></span>
+            <button id="next-page" disabled>Next Page</button>
+        </div>
+
+        <div id="content-display"></div>
+        <div id="status" class="status"></div>
+    </div>
+
+    <script>
+        // JavaScript remains unchanged
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        
+        const fileInput = document.getElementById('file-input');
+        const contentDisplay = document.getElementById('content-display');
+        const speedSelect = document.getElementById('speech-speed');
+        const prevButton = document.getElementById('prev-page');
+        const nextButton = document.getElementById('next-page');
+        const pageNum = document.getElementById('page-num');
+        const status = document.getElementById('status');
+        
+        let speechSynthesis = window.speechSynthesis;
+        let currentPdf = null;
+        let currentPage = 1;
+        let totalPages = 1;
+
+        fileInput.addEventListener('change', handleFileSelect);
+        prevButton.addEventListener('click', () => changePage(-1));
+        nextButton.addEventListener('click', () => changePage(1));
+
+        async function handleFileSelect(event) {
+            const file = event.target.files[0];
+            status.textContent = 'Loading file...';
+            
+            if (file.type === 'application/pdf') {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({data: arrayBuffer}).promise;
+                currentPdf = pdf;
+                totalPages = pdf.numPages;
+                currentPage = 1;
+                updatePageControls();
+                await displayPdfPage(currentPage);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    displayContent(e.target.result);
+                    currentPdf = null;
+                    updatePageControls();
+                };
+                reader.readAsText(file);
+            }
+            
+            status.textContent = 'File loaded successfully!';
+        }
+
+        async function displayPdfPage(pageNumber) {
+            const page = await currentPdf.getPage(pageNumber);
+            const textContent = await page.getTextContent();
+            const text = textContent.items.map(item => item.str).join(' ');
+            displayContent(text);
+            pageNum.textContent = `Page ${pageNumber} of ${totalPages}`;
+        }
+
+        function changePage(delta) {
+            if (currentPdf) {
+                currentPage = Math.max(1, Math.min(currentPage + delta, totalPages));
+                displayPdfPage(currentPage);
+                updatePageControls();
+            }
+        }
+
+        function updatePageControls() {
+            if (currentPdf) {
+                prevButton.disabled = currentPage <= 1;
+                nextButton.disabled = currentPage >= totalPages;
+                pageNum.textContent = `Page ${currentPage} of ${totalPages}`;
+                prevButton.style.display = 'inline';
+                nextButton.style.display = 'inline';
+                pageNum.style.display = 'inline';
+            } else {
+                prevButton.style.display = 'none';
+                nextButton.style.display = 'none';
+                pageNum.style.display = 'none';
+            }
+        }
+
+        function displayContent(text) {
+            const words = text.split(/\s+/);
+            contentDisplay.innerHTML = words
+                .map(word => `<span>${word}</span>`)
+                .join(' ');
+
+            document.querySelectorAll('#content-display span').forEach(span => {
+                span.addEventListener('click', () => handleWordClick(span));
+            });
+        }
+
+        function handleWordClick(element) {
+            document.querySelectorAll('.highlight').forEach(el => {
+                el.classList.remove('highlight');
+            });
+
+            element.classList.add('highlight');
+            const word = element.textContent;
+            spellAndSpeakWord(word);
+        }
+
+        function spellAndSpeakWord(word) {
+            speechSynthesis.cancel();
+            
+            const speed = parseFloat(speedSelect.value);
+            const letters = word.split('');
+            let delay = 0;
+            
+            letters.forEach((letter, index) => {
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance(letter);
+                    utterance.rate = speed;
+                    speechSynthesis.speak(utterance);
+                }, delay);
+                delay += 800 / speed;
+            });
+
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.rate = speed;
+                speechSynthesis.speak(utterance);
+            }, delay + 500 / speed);
+        }
+    </script>
+</body>
+</html>
