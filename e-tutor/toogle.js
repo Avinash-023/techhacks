@@ -1,18 +1,20 @@
-// < !--JS for Toggle menu-- >
-var MenuItems = document.getElementById("MenuItems");
+const menuIcon = document.querySelector('.fa-bars');
+const menuItems = document.getElementById('MenuItems');
 
-MenuItems.style.maxHeight = "0px";
-
-function menutoggle() {
-    if (MenuItems.style.maxHeight == "0px") {
-        MenuItems.style.maxHeight = "200px";
+menuIcon.addEventListener('click', () => {
+    if (menuItems.style.display === "none" || menuItems.style.display === "") {
+        menuItems.style.display = "flex";
+        menuItems.classList.add('active');
     } else {
-        MenuItems.style.maxHeight = "0px";
+        menuItems.style.display = "none";
+        menuItems.classList.remove('active');
     }
-}
+});
 
-// copyright section change by year
-let copyrightElem = document.getElementById('copyright-text');
-let currentYear = new Date().getFullYear()
-let fullText = `Copyright ${currentYear} - introidx`;
-copyrightElem.innerText = fullText;
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    if (!menuItems.contains(e.target) && !menuIcon.contains(e.target)) {
+        menuItems.style.display = "none";
+        menuItems.classList.remove('active');
+    }
+});
