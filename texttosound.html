@@ -1,45 +1,340 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text to Speech Example</title>
-</head>
-<body>
-    <h1>Text to Speech Converter</h1>
-    <textarea id="text-input" rows="10" cols="30" placeholder="Type your text here..."></textarea><br>
-    <button id="speak-button">Speak</button>
-    
-    <script>
-        let voices = [];
-
-        function populateVoiceList() {
-            voices = speechSynthesis.getVoices().filter(voice => voice.name.includes('Female'));
+    <title>Advanced Text to Speech Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        speechSynthesis.onvoiceschanged = populateVoiceList;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(41, 128, 185, 0.9), rgba(52, 152, 219, 0.8)), 
+                        linear-gradient(45deg, rgba(41, 128, 185, 0.8), rgba(52, 152, 219, 0.7));
+            background-attachment: fixed;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
 
-        document.getElementById('speak-button').addEventListener('click', function() {
-            const text = document.getElementById('text-input').value;
-            if (text) {
-                const utterance = new SpeechSynthesisUtterance(text);
-            
-                utterance.rate = 0.5; // Slow down the speech
-                utterance.pitch = 1; // Normal pitch for clarity
-                
-            
-                const femaleVoice = voices.find(voice => voice.name.includes('Female'));
-                if (femaleVoice) {
-                    utterance.voice = femaleVoice;
-                }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    background-clip: text; /* Standard property for compatibility */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+        .input-section {
+            margin-bottom: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid rgba(52, 152, 219, 0.3);
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+
+        select, input[type="range"] {
+            padding: 0.5rem;
+            border: 2px solid rgba(52, 152, 219, 0.3);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input[type="range"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #speak-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        #pause-button {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        #stop-button {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status.speaking {
+            display: block;
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Speech Converter</h1>
+        
+        <div class="input-section">
+            <textarea id="text-input" placeholder="Type or paste your text here..."></textarea>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="voice-select">Voice:</label>
+                <select id="voice-select"></select>
+            </div>
             
-                speechSynthesis.speak(utterance);
+            <div class="control-group">
+                <label for="rate">Speed: <span id="rate-value">1</span>x</label>
+                <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
+            </div>
+
+            <div class="control-group">
+                <label for="pitch">Pitch: <span id="pitch-value">1</span></label>
+                <input type="range" id="pitch" min="0.5" max="2" value="1" step="0.1">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="speak-button">
+                <span>Speak</span>
+            </button>
+            <button id="pause-button">
+                <span>Pause/Resume</span>
+            </button>
+            <button id="stop-button">
+                <span>Stop</span>
+            </button>
+        </div>
+
+        <div id="status" class="status">Speaking...</div>
+    </div>
+
+    <script>
+        let voices = [];
+        let currentUtterance = null;
+        let isPaused = false;
+
+        // Initialize voices
+        function populateVoiceList() {
+            voices = speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById('voice-select');
+            voiceSelect.innerHTML = '';
+            
+            voices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        // Handle voice loading
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        } else {
+            setTimeout(populateVoiceList, 500); // Wait 500ms to ensure voices load
+        }
+
+        // Update range value displays
+        document.getElementById('rate').addEventListener('input', (e) => {
+            document.getElementById('rate-value').textContent = e.target.value;
+        });
+
+        document.getElementById('pitch').addEventListener('input', (e) => {
+            document.getElementById('pitch-value').textContent = e.target.value;
+        });
+
+        // Speak functionality
+        document.getElementById('speak-button').addEventListener('click', () => {
+            const text = document.getElementById('text-input').value.trim();
+            if (!text) {
+                alert('Please enter some text to speak.');
+                return;
+            }
+
+            // Stop any ongoing speech
+            speechSynthesis.cancel();
+            isPaused = false;
+
+            // Create new utterance
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            
+            // Set selected voice
+            const voiceIndex = document.getElementById('voice-select').value;
+            currentUtterance.voice = voices[voiceIndex];
+
+            // Set other properties
+            currentUtterance.rate = parseFloat(document.getElementById('rate').value);
+            currentUtterance.pitch = parseFloat(document.getElementById('pitch').value);
+
+            // Handle events
+            currentUtterance.onstart = () => {
+                document.getElementById('status').classList.add('speaking');
+            };
+
+            currentUtterance.onend = () => {
+                document.getElementById('status').classList.remove('speaking');
+                isPaused = false;
+            };
+
+            // Speak
+            speechSynthesis.speak(currentUtterance);
+        });
+
+        // Pause/Resume functionality
+        document.getElementById('pause-button').addEventListener('click', () => {
+            if (!currentUtterance) return;
+
+            if (isPaused) {
+                speechSynthesis.resume();
+                isPaused = false;
             } else {
-                alert('Please enter some text.');
+                speechSynthesis.pause();
+                isPaused = true;
             }
         });
+
+        // Stop functionality
+        document.getElementById('stop-button').addEventListener('click', () => {
+            speechSynthesis.cancel();
+            document.getElementById('status').classList.remove('speaking');
+            isPaused = false;
+        });
+
+        // Initial voice population
+        populateVoiceList();
     </script>
 </body>
 </html>
