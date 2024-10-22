@@ -295,24 +295,26 @@
         }
 
         form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (password.value !== repassword.value) {
-                repassword.classList.add('invalid-input');
-                form.classList.add('form-shake');
-                setTimeout(() => form.classList.remove('form-shake'), 500);
-                return;
-            }
+    if (password.value !== repassword.value) {
+        repassword.classList.add('invalid-input');
+        form.classList.add('form-shake');
+        setTimeout(() => form.classList.remove('form-shake'), 500);
+        e.preventDefault(); // Prevent submission if passwords don't match
+        return;
+    }
 
-            const button = form.querySelector('button');
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            setTimeout(() => {
-                button.innerHTML = '<i class="fas fa-check"></i> Success!';
-                button.style.background = '#28a745';
-                setTimeout(() => {
-                    form.submit();
-                }, 1000);
-            }, 1500);
-        });
+    // If validation passes, allow the form to submit
+    const button = form.querySelector('button');
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    setTimeout(() => {
+        button.innerHTML = '<i class="fas fa-check"></i> Success!';
+        button.style.background = '#28a745';
+        setTimeout(() => {
+            form.submit(); // Submit the form, which will redirect to the action URL
+        }, 1000);
+    }, 1500);
+});
+
 
         password.addEventListener('input', () => {
             if (repassword.value) {
