@@ -1,192 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Text Resizer and Music Player</title>
     <style>
         body {
-            margin: 0;
             font-family: 'Arial', sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            transition: background-color 0.3s;
-        }
-
-        .light-mode {
-            background: linear-gradient(135deg, #a8e0f8, #f0e4f0);
-        }
-
-        .dark-mode {
-            background: #1a1a1a;
-        }
-
-        .main {
-            width: 400px; /* Increased width */
-            padding: 30px; /* Adjusted padding */
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0, 150, 255, 0.7);
-            text-align: center;
-            position: relative;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .light-mode .main {
-            background: #fff;
+            background: url('https://source.unsplash.com/featured/?education,learning') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
+            margin: 0;
+            transition: background-color 0.5s, color 0.5s;
         }
 
-        .dark-mode .main {
-            background: #333;
-            color: #fff;
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #a8e0f8, #f0e4f0);
+            z-index: 1;
         }
 
-        h2 {
-            margin-bottom: 20px; /* Adjusted margin */
-            font-size: 1.8em; /* Adjusted font size */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+
+        #displayText {
+            font-size: 24px;
+            margin: 20px;
+            padding: 10px;
+            border: 2px solid #673ab7;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: font-size 0.2s ease;
+            z-index: 2;
+            color: #555;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #673ab7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+            z-index: 2;
+        }
+
+        button:hover {
+            background-color: #5e35b1;
+            transform: translateY(-2px);
+        }
+
+        select {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #673ab7;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
 
         label {
-            display: block;
-            margin: 10px 0 5px; /* Adjusted margins */
-            font-weight: bold;
-            text-align: left;
+            margin: 10px;
+            font-size: 18px;
+            color: #555;
+            z-index: 2;
         }
 
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        input[type="tel"] {
-            width: calc(100% - 20px);
-            padding: 10px; /* Adjusted padding */
-            margin-bottom: 15px; /* Adjusted margin */
-            border: 1px solid #007acc;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .light-mode input {
-            background: rgba(255, 255, 255, 0.15);
-            color: #333;
-        }
-
-        .dark-mode input {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 10px; /* Adjusted padding */
-            border: none;
-            border-radius: 5px;
-            background: #007acc;
-            color: #fff;
-            font-size: 1em; /* Kept size the same */
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            margin-top: 15px; /* Adjusted margin */
-        }
-
-        button[type="submit"]:hover {
-            background: #005f99;
-        }
-
-        p {
-            margin-top: 20px; /* Adjusted margin */
-        }
-
-        a {
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .toggle-button {
+        .top-right-buttons {
             position: absolute;
-            top: 15px; /* Adjusted position */
-            right: 15px; /* Adjusted position */
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5em;
-            color: #007acc;
-            transition: color 0.3s;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 3;
         }
 
-        .dark-mode .toggle-button {
-            color: #fff;
+        .icon-button {
+            background-color: #673ab7;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
         }
-        .reg{
-            color: #007acc;
+
+        .icon-button:hover {
+            background-color: #5e35b1;
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+
+        .dark-mode .overlay {
+            background: radial-gradient(circle, rgba(50, 50, 50, 0.7), rgba(30, 30, 30, 0.7));
         }
     </style>
 </head>
+<body>
 
-<body class="light-mode">
-    <div class="main">
-        <button class="toggle-button" id="toggleButton" title="Toggle Dark Mode">
-            <i class="fas fa-moon"></i>
+    <div class="overlay"></div>
+
+    <div class="top-right-buttons">
+        <button class="icon-button" onclick="toggleMusic()">
+            <span id="musicIcon" class="icon">🎵</span>
         </button>
-        <h2 class="reg">Registration Form</h2>
-        <form id="registrationForm" action="">
-            <label for="first">First Name:</label>
-            <input type="text" id="first" name="first" required />
-
-            <label for="last">Last Name:</label>
-            <input type="text" id="last" name="last" required />
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required />
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password"
-                   pattern="^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9])\S{8,}$"
-                   title="Password must contain at least one number, one alphabet, one symbol, and be at least 8 characters long" required />
-
-            <label for="repassword">Re-type Password:</label>
-            <input type="password" id="repassword" name="repassword" required />
-
-            <label for="mobile">Contact:</label>
-            <input type="tel" id="mobile" name="mobile" maxlength="10" required />
-
-            <button type="submit" formaction="./e-tutor/login2.html">Submit</button>
-        </form>
+        <button class="icon-button" onclick="toggleMode()">
+            <span id="modeIcon" class="icon">☀️</span>
+        </button>
     </div>
 
+    <h1>Text Resizer and Music Player</h1>
+
+    <input type="text" placeholder="Type here..."div id="displayText"></div>
+    
+
+    <button onclick="shrinkText()">Make Smaller</button>
+    <button onclick="enlargeText()">Make Bigger</button>
+
+    <label for="fontSelect">Choose Font Style:</label>
+    <select id="fontSelect" onchange="updateFontStyle()">
+        <option value="Arial">Arial</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Verdana">Verdana</option>
+    </select>
+
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
-        const toggleButton = document.getElementById('toggleButton');
-        const body = document.body;
+        const music = document.getElementById('backgroundMusic');
+        let isPlaying = true;
 
-        toggleButton.addEventListener('click', () => {
-            if (body.classList.contains('light-mode')) {
-                body.classList.remove('light-mode');
-                body.classList.add('dark-mode');
-                toggleButton.innerHTML = '<i class="fas fa-sun"></i>';
+        function toggleMusic() {
+            const musicIcon = document.getElementById('musicIcon');
+            if (isPlaying) {
+                music.pause();
+                musicIcon.textContent = '🔇';
             } else {
-                body.classList.remove('dark-mode');
-                body.classList.add('light-mode');
-                toggleButton.innerHTML = '<i class="fas fa-moon"></i>';
+                music.play();
+                musicIcon.textContent = '🎵';
             }
-        });
+            isPlaying = !isPlaying;
+        }
 
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const repassword = document.getElementById('repassword').value;
-
-            if (password !== repassword) {
-                alert('Passwords do not match!');
-                e.preventDefault();
+        function toggleMode() {
+            const body = document.body;
+            const modeIcon = document.getElementById('modeIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                modeIcon.textContent = '🌙';
+            } else {
+                modeIcon.textContent = '☀️';
             }
-        });
+        }
+
+        function shrinkText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize - 5) + 'px';
+        }
+
+        function enlargeText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize + 5) + 'px';
+        }
+
+        function updateFontStyle() {
+            const textElement = document.getElementById('displayText');
+            const selectedFont = document.getElementById('fontSelect').value;
+            textElement.style.fontFamily = selectedFont;
+        }
+
+        function updateText() {
+            const textElement = document.getElementById('displayText');
+            const inputText = document.getElementById('textInput').value;
+            textElement.textContent = inputText;
+        }
     </script>
-</body>
 
+</body>
 </html>

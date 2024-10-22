@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Size, Style, and Music Converter</title>
+    <title>Text Resizer and Music Player</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -12,25 +12,43 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background: linear-gradient(135deg, #e1bee7, #ffcc80);
+            background: url('https://source.unsplash.com/featured/?education,learning') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
             margin: 0;
+            transition: background-color 0.5s, color 0.5s;
         }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #a8e0f8, #f0e4f0);
+            z-index: 1;
+        }
+
         h1 {
             font-size: 2.5em;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 2;
         }
-        #text {
-            font-size: 24px; /* Default text size */
+
+        #displayText {
+            font-size: 24px;
             margin: 20px;
             padding: 10px;
             border: 2px solid #673ab7;
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transition: font-size 0.2s ease;
+            z-index: 2;
+            color: #555;
         }
+
         button {
             margin: 5px;
             padding: 10px 20px;
@@ -42,11 +60,14 @@
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s, transform 0.2s;
+            z-index: 2;
         }
+
         button:hover {
             background-color: #5e35b1;
             transform: translateY(-2px);
         }
+
         select {
             margin: 10px;
             padding: 10px;
@@ -55,23 +76,80 @@
             border-radius: 5px;
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 2;
         }
+
         label {
             margin: 10px;
             font-size: 18px;
             color: #555;
+            z-index: 2;
+        }
+
+        .top-right-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+            z-index: 3;
+        }
+
+        .icon-button {
+            background-color: #673ab7;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .icon-button:hover {
+            background-color: #5e35b1;
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            font-size: 24px;
+            color: white;
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+
+        .dark-mode .overlay {
+            background: radial-gradient(circle, rgba(50, 50, 50, 0.7), rgba(30, 30, 30, 0.7));
         }
     </style>
 </head>
 <body>
 
-    <h1>Text Size, Style, and Music Converter</h1>
-    <div id="text">This is some text!</div>
-    <button onclick="makeTextSmaller()">Make Smaller</button>
-    <button onclick="makeTextBigger()">Make Bigger</button>
+    <div class="overlay"></div>
 
-    <label for="fontStyle">Choose Font Style:</label>
-    <select id="fontStyle" onchange="changeFontStyle()">
+    <div class="top-right-buttons">
+        <button class="icon-button" onclick="toggleMusic()">
+            <span id="musicIcon" class="icon">🎵</span>
+        </button>
+        <button class="icon-button" onclick="toggleMode()">
+            <span id="modeIcon" class="icon">☀️</span>
+        </button>
+    </div>
+
+    <h1>Text Resizer and Music Player</h1>
+
+    <div id="displayText">This is some text!</div>
+    <button onclick="shrinkText()">Make Smaller</button>
+    <button onclick="enlargeText()">Make Bigger</button>
+
+    <label for="fontSelect">Choose Font Style:</label>
+    <select id="fontSelect" onchange="updateFontStyle()">
         <option value="Arial">Arial</option>
         <option value="Courier New">Courier New</option>
         <option value="Georgia">Georgia</option>
@@ -79,28 +157,54 @@
         <option value="Verdana">Verdana</option>
     </select>
 
-    <audio autoplay loop>
+    <audio id="backgroundMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
     <script>
-        function makeTextSmaller() {
-            const textDiv = document.getElementById('text');
-            let currentSize = parseInt(window.getComputedStyle(textDiv).fontSize);
-            textDiv.style.fontSize = (currentSize - 5) + 'px'; // Decrease by 5 pixels
+        const music = document.getElementById('backgroundMusic');
+        let isPlaying = true;
+
+        function toggleMusic() {
+            const musicIcon = document.getElementById('musicIcon');
+            if (isPlaying) {
+                music.pause();
+                musicIcon.textContent = '🔇';
+            } else {
+                music.play();
+                musicIcon.textContent = '🎵';
+            }
+            isPlaying = !isPlaying;
         }
 
-        function makeTextBigger() {
-            const textDiv = document.getElementById('text');
-            let currentSize = parseInt(window.getComputedStyle(textDiv).fontSize);
-            textDiv.style.fontSize = (currentSize + 5) + 'px'; // Increase by 5 pixels
+        function toggleMode() {
+            const body = document.body;
+            const modeIcon = document.getElementById('modeIcon');
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                modeIcon.textContent = '🌙';
+            } else {
+                modeIcon.textContent = '☀️';
+            }
         }
 
-        function changeFontStyle() {
-            const textDiv = document.getElementById('text');
-            const selectedFont = document.getElementById('fontStyle').value;
-            textDiv.style.fontFamily = selectedFont; // Change font style
+        function shrinkText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize - 5) + 'px';
+        }
+
+        function enlargeText() {
+            const textElement = document.getElementById('displayText');
+            let currentFontSize = parseInt(window.getComputedStyle(textElement).fontSize);
+            textElement.style.fontSize = (currentFontSize + 5) + 'px';
+        }
+
+        function updateFontStyle() {
+            const textElement = document.getElementById('displayText');
+            const selectedFont = document.getElementById('fontSelect').value;
+            textElement.style.fontFamily = selectedFont;
         }
     </script>
 
