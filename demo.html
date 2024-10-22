@@ -3,173 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Advanced Text to Speech Converter</title>
     <style>
-        body {
+        * {
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #a8e0f8, #f0e4f0);
-            transition: background-color 0.5s ease;
-        }
-        .dark-mode {
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-        }
-        .main {
-            width: 400px;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            position: relative;
-            transition: all 0.4s ease;
-            transform: translateY(0);
-            opacity: 1;
-            animation: fadeIn 0.6s ease-out;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .light-mode .main {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            backdrop-filter: blur(10px);
-        }
-        .dark-mode .main {
-            background: rgba(51, 51, 51, 0.9);
-            color: #fff;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-        }
-        h1 {
-            margin-bottom: 30px;
-            font-size: 2em;
-            color: #007acc;
-            position: relative;
-            display: inline-block;
-        }
-        h1::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            bottom: -5px;
-            left: 0;
-            background: #007acc;
-            transition: width 0.3s ease;
-        }
-        .main:hover h1::after {
-            width: 100%;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
-        label {
-            display: block;
-            margin: 0 0 8px;
-            font-weight: bold;
-            text-align: left;
-            transition: color 0.3s ease;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
+            padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
         }
-        .light-mode input {
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
+
+        :root {
+            --bg-gradient-light: linear-gradient(135deg, #a8e0f8, #f0e4f0);
+            --bg-gradient-dark: linear-gradient(135deg, #1a1a2e, #16213e);
+            --container-bg-light: rgba(255, 255, 255, 0.92);
+            --container-bg-dark: rgba(30, 32, 44, 0.95);
+            --text-color-light: #2c3e50;
+            --text-color-dark: #e0e0e0;
+            --input-bg-light: rgba(255, 255, 255, 0.9);
+            --input-bg-dark: rgba(40, 44, 52, 0.9);
+            --border-color-light: rgba(52, 152, 219, 0.3);
+            --border-color-dark: rgba(82, 182, 249, 0.3);
         }
-        .dark-mode input {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-            border-color: #555;
-        }
-        input:focus {
-            outline: none;
-            border-color: #007acc;
-            box-shadow: 0 0 0 3px rgba(0, 122, 204, 0.2);
-            transform: translateY(-2px);
-        }
-        button[type="submit"] {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: #007acc;
-            color: #fff;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: var(--bg-gradient-light);
+            background-attachment: fixed;
+            padding: 2rem;
             position: relative;
             overflow: hidden;
         }
-        button[type="submit"]::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+
+        body.dark-mode {
+            background: var(--bg-gradient-dark);
+            color: var(--text-color-dark);
         }
-        button[type="submit"]:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        button[type="submit"]:hover {
-            background: #005f99;
-            transform: translateY(-2px);
-        }
-        button[type="submit"]:active {
-            transform: translateY(1px);
-        }
-        p {
-            margin-top: 25px;
-            transition: opacity 0.3s ease;
-        }
-        a {
-            text-decoration: none;
-            font-weight: bold;
-            color: #007acc;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -2px;
-            left: 0;
-            background: #007acc;
-            transition: width 0.3s ease;
-        }
-        a:hover::after {
-            width: 100%;
-        }
-        .toggle-button {
+
+        .theme-toggle {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -181,82 +52,293 @@
             transition: all 0.3s ease;
             padding: 8px;
             border-radius: 50%;
+            z-index: 2;
         }
-        .toggle-button:hover {
-            background: rgba(0, 122, 204, 0.1);
-            transform: rotate(15deg);
+
+        .dark-mode .theme-toggle {
+            color: #64b5f6;
         }
-        .dark-mode .toggle-button {
-            color: #fff;
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg-light);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
         }
-        .form-shake {
-            animation: shake 0.5s ease-in-out;
+
+        .dark-mode .container {
+            background: var(--container-bg-dark);
+            border-color: rgba(255, 255, 255, 0.1);
         }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+
+        h1 {
+            color: var(--text-color-light);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dark-mode h1 {
+            background: linear-gradient(135deg, #64b5f6, #2196f3);
+            background-clip: text;
+            -webkit-background-clip: text;
+        }
+
+        .input-section {
+            margin-bottom: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 2px solid var(--border-color-light);
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+            background: var(--input-bg-light);
+            color: var(--text-color-light);
+        }
+
+        .dark-mode textarea {
+            background: var(--input-bg-dark);
+            border-color: var(--border-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.2);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-color-light);
+        }
+
+        .dark-mode label {
+            color: var(--text-color-dark);
+        }
+
+        select, input[type="range"] {
+            padding: 0.5rem;
+            border: 2px solid var(--border-color-light);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--input-bg-light);
+            color: var(--text-color-light);
+        }
+
+        .dark-mode select, .dark-mode input[type="range"] {
+            background: var(--input-bg-dark);
+            border-color: var(--border-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #speak-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        #pause-button {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        #stop-button {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status.speaking {
+            display: block;
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            animation: pulse 2s infinite;
+        }
+
+        .dark-mode .status.speaking {
+            background: rgba(52, 152, 219, 0.3);
+            color: #64b5f6;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
-<body class="light-mode">
-    <div class="main">
-        <button class="toggle-button" id="toggleButton" title="Toggle Dark Mode">
-            <i class="fas fa-moon"></i>
-        </button>
-        <h1>Login</h1>
-        <form id="loginForm" action="./e-tutor/home.html" method="post">
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your Email" required>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <h1>Text to Speech Converter</h1>
+        
+        <div class="input-section">
+            <textarea id="text-input" placeholder="Type or paste your text here..."></textarea>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="voice-select">Voice:</label>
+                <select id="voice-select"></select>
             </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter your Password" required>
+            
+            <div class="control-group">
+                <label for="rate">Speed: <span id="rate-value">1</span>x</label>
+                <input type="range" id="rate" min="0.5" max="2" value="1" step="0.1">
             </div>
-            <button type="submit">Login</button>
-        </form>
-        <p>Not registered? <a href="../reg.html">Create an account</a></p>
+
+            <div class="control-group">
+                <label for="pitch">Pitch: <span id="pitch-value">1</span></label>
+                <input type="range" id="pitch" min="0.5" max="2" value="1" step="0.1">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="speak-button" onclick="speakText()">Speak</button>
+            <button id="pause-button" onclick="pauseSpeech()">Pause</button>
+            <button id="stop-button" onclick="stopSpeech()">Stop</button>
+        </div>
+
+        <div class="status" id="status"></div>
     </div>
+
     <script>
-        const toggleButton = document.getElementById('toggleButton');
-        const body = document.body;
-        const form = document.getElementById('loginForm');
-        const inputs = document.querySelectorAll('input');
-        toggleButton.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            toggleButton.style.transform = 'rotate(180deg)';
-            setTimeout(() => {
-                toggleButton.innerHTML = body.classList.contains('dark-mode') ? 
-                    '<i class="fas fa-sun"></i>' : 
-                    '<i class="fas fa-moon"></i>';
-                toggleButton.style.transform = 'rotate(0deg)';
-            }, 150);
-        });
-        inputs.forEach(input => {
-            input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'translateY(-2px)';
+        const textInput = document.getElementById('text-input');
+        const voiceSelect = document.getElementById('voice-select');
+        const rateInput = document.getElementById('rate');
+        const pitchInput = document.getElementById('pitch');
+        const statusDiv = document.getElementById('status');
+
+        let synth = window.speechSynthesis;
+        let voices = [];
+        let isSpeaking = false;
+
+        function loadVoices() {
+            voices = synth.getVoices();
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name} (${voice.lang})`;
+                voiceSelect.appendChild(option);
             });
-            input.addEventListener('blur', () => {
-                input.parentElement.style.transform = 'translateY(0)';
-            });
-        });
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if (!email || !password) {
-                form.classList.add('form-shake');
-                setTimeout(() => {
-                    form.classList.remove('form-shake');
-                }, 500);
-            } else {
-                const button = form.querySelector('button');
-                button.innerHTML = '<i class="fas fa-check"></i> Success!';
-                button.style.background = '#28a745';
-                setTimeout(() => {
-                    form.submit();
-                }, 1000);
+        }
+
+        function speakText() {
+            if (isSpeaking) return;
+            const utterance = new SpeechSynthesisUtterance(textInput.value);
+            const selectedVoice = voices.find(voice => voice.name === voiceSelect.value);
+            utterance.voice = selectedVoice;
+            utterance.rate = rateInput.value;
+            utterance.pitch = pitchInput.value;
+            utterance.onstart = () => {
+                isSpeaking = true;
+                statusDiv.textContent = "Speaking...";
+                statusDiv.classList.add('speaking');
+            };
+            utterance.onend = () => {
+                isSpeaking = false;
+                statusDiv.textContent = "";
+                statusDiv.classList.remove('speaking');
+            };
+            synth.speak(utterance);
+        }
+
+        function pauseSpeech() {
+            if (isSpeaking) {
+                synth.pause();
             }
+        }
+
+        function stopSpeech() {
+            synth.cancel();
+            isSpeaking = false;
+            statusDiv.textContent = "";
+            statusDiv.classList.remove('speaking');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        window.addEventListener('load', loadVoices);
+        rateInput.addEventListener('input', () => {
+            document.getElementById('rate-value').textContent = rateInput.value;
+        });
+        pitchInput.addEventListener('input', () => {
+            document.getElementById('pitch-value').textContent = pitchInput.value;
         });
     </script>
+</body>
+</html>
