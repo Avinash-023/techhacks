@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+}
+
+.drop-zone.hover {
+    border-color: #333;
+}
+
+.output {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slide {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    max-width: 100%;
+}
+
+button {
+    margin-top: 20px;
+}
