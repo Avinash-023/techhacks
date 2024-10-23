@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(166, 195, 234);
+        }
+
+        h1 {
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 500px) {
+            textarea {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Text to Speech Converter</h1>
+    <textarea id="text-input" rows="10" placeholder="Type your text here..."></textarea><br>
+    <button id="speak-button">Speak</button>
+    
+    <script>
+        let voices = [];
+
+        function populateVoiceList() {
+            voices = speechSynthesis.getVoices().filter(voice => voice.name.includes('Female'));
+        }
+
+        speechSynthesis.onvoiceschanged = populateVoiceList;
+
+        document.getElementById('speak-button').addEventListener('click', function() {
+            const text = document.getElementById('text-input').value;
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+            
+                utterance.rate = 0.5; // Slow down the speech
+                utterance.pitch = 1; // Normal pitch for clarity
+            
+                const femaleVoice = voices.find(voice => voice.name.includes('Female'));
+                if (femaleVoice) {
+                    utterance.voice = femaleVoice;
+                }
+
+                speechSynthesis.speak(utterance);
+            } else {
+                alert('Please enter some text.');
+            }
+        });
+    </script>
+</body>
+</html>
